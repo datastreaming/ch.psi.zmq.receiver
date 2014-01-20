@@ -99,6 +99,14 @@ GET receiver/{id}/done
 200 -
 ``` 
 
+Start new receiver
+
+```
+GET receiver/{id}
+
+integer
+
+```
 
 ### Command Line
 

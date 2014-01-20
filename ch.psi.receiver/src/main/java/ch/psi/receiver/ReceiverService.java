@@ -118,6 +118,16 @@ public class ReceiverService {
 	}
 	
 	@GET
+	@Path("receiver/{trackingid}")
+	public int getStatus(@PathParam("trackingid") String trackingid) {
+		Receiver receiver = receivers.get(trackingid);
+		if(receiver==null){
+			throw new NotFoundException();
+		}
+		return receiver.getMessagesReceived();
+	}
+	
+	@GET
 	@Path("receiver/{trackingid}/done")
 	public void awaitTermination(@PathParam("trackingid") String trackingid) throws InterruptedException, ExecutionException, TimeoutException{
 		Receiver receiver = receivers.get(trackingid);

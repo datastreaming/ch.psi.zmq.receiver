@@ -74,4 +74,8 @@ public class Receiver {
 	public boolean isDone(){
 		return receiver.isDone();
 	}
+	
+	public int getMessagesReceived(){
+		return receiver.getMessagesReceived();
+	}
 }
