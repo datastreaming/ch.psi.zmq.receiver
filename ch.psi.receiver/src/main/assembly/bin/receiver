@@ -39,4 +39,4 @@ done
 
 RECEIVER_BASE=$BASEDIR/../
 export RECEIVER_BASE
-java $VM_ARGUMENTS -cp $CLASSPATH ch.psi.streamer.FileReceiver $ARGUMENTS
+java $VM_ARGUMENTS -cp $CLASSPATH ch.psi.receiver.ReceiverServer $ARGUMENTS

@@ -39,7 +39,7 @@ chown $USER $LOGFILE
 
 case "$1" in
 start)
-  $SU "PATH=/opt/jre/bin:$PATH $HOME/latest/bin/receiver -d /ramdisk -p 8080 > $LOGFILE 2>&1 &"
+  $SU "PATH=/opt/jre/bin:$PATH $HOME/latest/bin/receiver -d /tmp -p 8080 > $LOGFILE 2>&1 &"
   ;;
 stop)
   $SU "pkill -f 'java .* $HOME' >> $LOGFILE 2>&1 &"
