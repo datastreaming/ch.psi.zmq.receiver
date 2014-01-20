@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.UserPrincipal;
 import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -117,25 +118,37 @@ public class FileReceiver {
 					logger.warning("Message type ["+h.get("htype")+"] not supported - ignore message");
 					continue;
 				}
-				// TODO Save content to file (in basedir)
+				
+				
+				String username = (String) h.get("username");
+				
+				// Save content to file (in basedir)
 				String p = (String) h.get("path");
 				if(!p.startsWith("/")){
 					p = basedir+"/"+p;
 				}
 				File f = new File(p);
 				if(!path.equals(p)){
-					f.mkdirs();
+					if(username==null){
+						f.mkdirs();
+					}
+					else{
+						try{
+						mkdir(f, lookupservice.lookupPrincipalByName(username), perms);
+						} catch (IOException e) {
+							throw new RuntimeException("Unable to create directory for user "+username+"", e);
+						}
+					}
 					path = p;
 				}
 				
-				File file = new File(f, (String)h.get("filename")); // TODO remove
+				File file = new File(f, (String)h.get("filename"));
 				logger.finest("Write to "+file.getAbsolutePath());
 			
 				try(FileOutputStream s = new FileOutputStream(file)){
 					s.write(content);
 				}
 				
-				String username = (String) h.get("username");
 				if(username!=null){
 			        Files.setOwner(file.toPath(), lookupservice.lookupPrincipalByName(username));
 			        Files.setPosixFilePermissions(file.toPath(), perms);
@@ -157,7 +170,6 @@ public class FileReceiver {
 	}
 	
 	public void terminate(){
-//		socket.notifyAll();
 		receive=false;
 	}
 	
@@ -169,6 +181,24 @@ public class FileReceiver {
 		return done;
 	}
 	
+	/**
+	 * Recursively create directories for given user
+	 * @param f
+	 * @param user
+	 * @param perms
+	 * @throws IOException
+	 */
+	private void mkdir(File f, UserPrincipal user, Set<PosixFilePermission> perms) throws IOException{
+		if(f.getParentFile().exists()){
+			f.mkdir();
+			Files.setOwner(f.toPath(), user);
+			Files.setPosixFilePermissions(f.toPath(), perms);
+			return;
+		}
+		else{
+			mkdir(f.getParentFile(),user, perms);
+		}
+	}
 	
 
 	public static void main(String[] args) {
