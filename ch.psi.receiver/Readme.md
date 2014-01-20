@@ -40,7 +40,7 @@ GET version
 Get list of active receivers
 
 ```
-GET receivers
+GET receiver
 Accept: application/json
 
 200 - [ ]
@@ -69,7 +69,7 @@ Messages currently supported:
 Start new receiver
 
 ```
-PUT receivers/{id}
+PUT receiver/{id}
 
 {
 	"hostname":"",
@@ -86,10 +86,18 @@ PUT receivers/{id}
 Terminate receiver
 
 ```
-DELETE receivers/{id}
+DELETE receiver/{id}
 
 200 - 
 ```
+
+Wait for receiver to terminate after configured number of images are received
+
+```
+GET receiver/{id}/done
+
+200 -
+``` 
 
 
 ### Command Line
