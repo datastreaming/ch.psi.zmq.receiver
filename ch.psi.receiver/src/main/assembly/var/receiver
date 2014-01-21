@@ -25,7 +25,7 @@
 
 
 # Use Java 7
-PATH=/opt/jre/bin:$PATH
+PATH=/opt/java/latest/bin:$PATH
 export PATH
 
 USER=det
