@@ -37,11 +37,14 @@ public class Receiver {
 	private Future<?> future;
 	private FileReceiver receiver;
 	
+	private ReceiverRequest config;
+	
 	public Receiver(String basedir){
 		this.basedir = basedir;
 	}
 	
 	public void receive(final ReceiverRequest request){
+		this.config = request;
 		receiver = new FileReceiver(request.getHostname(), request.getPort(), basedir);
 		future = executor.submit(new Runnable() {
 			@Override
@@ -77,5 +80,9 @@ public class Receiver {
 	
 	public int getMessagesReceived(){
 		return receiver.getMessagesReceived();
+	}
+	
+	public ReceiverRequest getConfiguration(){
+		return config;
 	}
 }

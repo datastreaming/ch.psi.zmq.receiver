@@ -127,6 +127,7 @@ public class ReceiverService {
 		}
 		ReceiverStatus status = new ReceiverStatus();
 		status.setMessagesReceived(receiver.getMessagesReceived());
+		status.setConfiguration(receiver.getConfiguration());
 		return status;
 	}
 	

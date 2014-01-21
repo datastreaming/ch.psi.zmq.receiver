@@ -134,7 +134,11 @@ public class FileReceiver {
 					}
 					else{
 						try{
-						mkdir(f, lookupservice.lookupPrincipalByName(username), perms);
+							Set<PosixFilePermission> permissions = new HashSet<PosixFilePermission>();
+							permissions.add(PosixFilePermission.OWNER_READ);
+							permissions.add(PosixFilePermission.OWNER_WRITE);
+							permissions.add(PosixFilePermission.OWNER_EXECUTE);
+					        mkdir(f, lookupservice.lookupPrincipalByName(username), permissions);
 						} catch (IOException e) {
 							throw new RuntimeException("Unable to create directory for user "+username+"", e);
 						}

@@ -24,12 +24,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ReceiverStatus {
 
 	private int messagesReceived;
+	private ReceiverRequest configuration;
 
 	public int getMessagesReceived() {
 		return messagesReceived;
 	}
 	public void setMessagesReceived(int messagesReceived) {
 		this.messagesReceived = messagesReceived;
+	}
+	
+	public ReceiverRequest getConfiguration() {
+		return configuration;
+	}
+	public void setConfiguration(ReceiverRequest configuration) {
+		this.configuration = configuration;
 	}
 	
 	
