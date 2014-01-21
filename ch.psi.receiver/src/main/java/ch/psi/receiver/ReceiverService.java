@@ -41,6 +41,7 @@ import org.glassfish.jersey.media.sse.SseBroadcaster;
 import org.glassfish.jersey.media.sse.SseFeature;
 
 import ch.psi.receiver.model.ReceiverRequest;
+import ch.psi.receiver.model.ReceiverStatus;
 
 @Path("/")
 public class ReceiverService {
@@ -119,12 +120,14 @@ public class ReceiverService {
 	
 	@GET
 	@Path("receiver/{trackingid}")
-	public int getStatus(@PathParam("trackingid") String trackingid) {
+	public ReceiverStatus getStatus(@PathParam("trackingid") String trackingid) {
 		Receiver receiver = receivers.get(trackingid);
 		if(receiver==null){
 			throw new NotFoundException();
 		}
-		return receiver.getMessagesReceived();
+		ReceiverStatus status = new ReceiverStatus();
+		status.setMessagesReceived(receiver.getMessagesReceived());
+		return status;
 	}
 	
 	@GET

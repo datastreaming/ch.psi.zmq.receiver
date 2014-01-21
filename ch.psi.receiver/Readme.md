@@ -99,12 +99,14 @@ GET receiver/{id}/done
 200 -
 ``` 
 
-Start new receiver
+Get receiver status
 
 ```
 GET receiver/{id}
 
-integer
+{
+	"messagesReceived":10
+}
 
 ```
 
