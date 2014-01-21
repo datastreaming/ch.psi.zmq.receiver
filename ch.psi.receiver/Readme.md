@@ -104,8 +104,14 @@ Get receiver status
 ```
 GET receiver/{id}
 
+200 -
 {
-	"messagesReceived":10
+    "messagesReceived": 0,
+    "configuration": {
+        "hostname": "x10sa-pd-1-v132.psi.ch",
+        "port": 9988,
+        "numberOfImages": null
+    }
 }
 
 ```
