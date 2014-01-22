@@ -65,8 +65,9 @@ public class FileReceiver {
 	private String hostname;
 	private int port;
 	private String basedir;
-	private volatile boolean receive = true;
-	private volatile int counter = 0;
+	private boolean receive = true;
+	private int counter = 0;
+	private int counterDropped = 0;
 	
 	private boolean done = false;
 	
@@ -87,6 +88,7 @@ public class FileReceiver {
 	public void receive(Integer numImages){
 		done = false;
 		counter = 0;
+		counterDropped = 0;
 		receive = true;
 		context = ZMQ.context(1);
 		socket = context.socket(ZMQ.PULL);
@@ -128,12 +130,15 @@ public class FileReceiver {
 					p = basedir+"/"+p;
 				}
 				File f = new File(p);
+//				 if(!f.exists()){
 				if(!path.equals(p)){
 					if(username==null){
+						logger.info("Create directory "+p+"");
 						f.mkdirs();
 					}
 					else{
-						try{
+						logger.info("Create directory "+p+" for user "+username);
+						try{ 
 							Set<PosixFilePermission> permissions = new HashSet<PosixFilePermission>();
 							permissions.add(PosixFilePermission.OWNER_READ);
 							permissions.add(PosixFilePermission.OWNER_WRITE);
@@ -164,6 +169,7 @@ public class FileReceiver {
 				}
 			} catch (IOException e) {
 				logger.log(Level.SEVERE,"",e);
+				counterDropped++;
 			}
 		}
 		
@@ -181,6 +187,10 @@ public class FileReceiver {
 		return counter;
 	}
 	
+	public int getMessagesDropped(){
+		return counterDropped;
+	}
+	
 	public boolean isDone(){
 		return done;
 	}
@@ -192,16 +202,15 @@ public class FileReceiver {
 	 * @param perms
 	 * @throws IOException
 	 */
-	private void mkdir(File f, UserPrincipal user, Set<PosixFilePermission> perms) throws IOException{
-		if(f.getParentFile().exists()){
-			f.mkdir();
-			Files.setOwner(f.toPath(), user);
-			Files.setPosixFilePermissions(f.toPath(), perms);
-			return;
-		}
-		else{
+	public void mkdir(File f, UserPrincipal user, Set<PosixFilePermission> perms) throws IOException{
+		if(!f.getParentFile().exists()){
 			mkdir(f.getParentFile(),user, perms);
 		}
+		
+		logger.info("Create directory: "+f.getPath());
+		f.mkdir();
+		Files.setOwner(f.toPath(), user);
+		Files.setPosixFilePermissions(f.toPath(), perms);
 	}
 	
 

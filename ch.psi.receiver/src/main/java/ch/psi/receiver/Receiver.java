@@ -81,6 +81,9 @@ public class Receiver {
 	public int getMessagesReceived(){
 		return receiver.getMessagesReceived();
 	}
+	public int getMessagesDropped(){
+		return receiver.getMessagesDropped();
+	}
 	
 	public ReceiverRequest getConfiguration(){
 		return config;

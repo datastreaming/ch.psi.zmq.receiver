@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ReceiverStatus {
 
 	private int messagesReceived;
+	private int messagesDropped;
+	
 	private ReceiverRequest configuration;
 
 	public int getMessagesReceived() {
@@ -32,7 +34,12 @@ public class ReceiverStatus {
 	public void setMessagesReceived(int messagesReceived) {
 		this.messagesReceived = messagesReceived;
 	}
-	
+	public int getMessagesDropped() {
+		return messagesDropped;
+	}
+	public void setMessagesDropped(int messagesDropped) {
+		this.messagesDropped = messagesDropped;
+	}
 	public ReceiverRequest getConfiguration() {
 		return configuration;
 	}
