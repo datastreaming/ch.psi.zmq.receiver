@@ -86,6 +86,8 @@ public class FileReceiver {
 	 * Receive ZMQ messages with pilatus-1.0 header type and write the data part to disk
 	 */
 	public void receive(Integer numImages){
+		
+		try{
 		done = false;
 		counter = 0;
 		counterDropped = 0;
@@ -173,14 +175,25 @@ public class FileReceiver {
 			}
 		}
 		
-		logger.info("Close receiver socket");
-		socket.close();
-		context.close();
-		done = true;
+//		logger.info("Close receiver socket");
+//		socket.close();
+//		context.close();
+//		done = true;
+		}
+		catch(Exception e){
+			if(receive){
+				e.printStackTrace();
+			}
+			// else ignore
+		}
 	}
 	
 	public void terminate(){
+		logger.info("Terminate receiver");
 		receive=false;
+		socket.close();
+		context.close();
+		done = true;
 	}
 	
 	public int getMessagesReceived(){
