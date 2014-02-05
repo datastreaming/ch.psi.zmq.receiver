@@ -78,6 +78,11 @@ public class FileReceiver {
 	}
 	
 	
+	public void reset(){
+		counter = 0;
+		counterDropped = 0;
+	}
+	
 	public void receive(){
 		receive(null);
 	}

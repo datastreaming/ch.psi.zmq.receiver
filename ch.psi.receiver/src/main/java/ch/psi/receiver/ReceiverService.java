@@ -94,6 +94,18 @@ public class ReceiverService {
         broadcaster.broadcast(event);
 	}
 	
+	
+	/**
+	 * Reset all status information for all receivers (basically this is a reset number of images received to 0)
+	 */
+	@PUT
+	@Path("receiver/reset")
+	public void resetAll(){
+		for(Receiver r: receivers.values()){
+			r.reset();
+		}
+	}
+	
 	@DELETE
 	@Path("receiver/{trackingid}")
 	public void terminate(@PathParam("trackingid") String trackingid){

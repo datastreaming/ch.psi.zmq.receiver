@@ -116,6 +116,14 @@ GET receiver/{id}
 
 ```
 
+Reset status/counters of all receivers
+
+```
+PUT receiver/reset
+
+204 - Success
+```
+
 ### Command Line
 
 Create stream

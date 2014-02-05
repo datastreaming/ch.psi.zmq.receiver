@@ -88,4 +88,8 @@ public class Receiver {
 	public ReceiverRequest getConfiguration(){
 		return config;
 	}
+	
+	public void reset(){
+		receiver.reset();
+	}
 }
