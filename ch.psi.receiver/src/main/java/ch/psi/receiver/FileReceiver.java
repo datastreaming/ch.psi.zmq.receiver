@@ -111,6 +111,8 @@ public class FileReceiver {
 		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
         perms.add(PosixFilePermission.OWNER_READ);
         perms.add(PosixFilePermission.OWNER_WRITE);
+        perms.add(PosixFilePermission.GROUP_READ);
+        perms.add(PosixFilePermission.GROUP_WRITE);
 		
 		while(receive){
 			try{
@@ -150,6 +152,9 @@ public class FileReceiver {
 							permissions.add(PosixFilePermission.OWNER_READ);
 							permissions.add(PosixFilePermission.OWNER_WRITE);
 							permissions.add(PosixFilePermission.OWNER_EXECUTE);
+							permissions.add(PosixFilePermission.GROUP_READ);
+							permissions.add(PosixFilePermission.GROUP_WRITE);
+							permissions.add(PosixFilePermission.GROUP_EXECUTE);
 					        mkdir(f, lookupservice.lookupPrincipalByName(username), permissions);
 						} catch (IOException e) {
 							throw new RuntimeException("Unable to create directory for user "+username+"", e);
