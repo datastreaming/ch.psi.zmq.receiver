@@ -18,13 +18,21 @@
  */
 package ch.psi.receiver;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.GroupPrincipal;
+import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.UserPrincipalLookupService;
+import java.nio.file.attribute.UserPrincipal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,16 +63,68 @@ public class FileReceiverTest {
 	public void test() throws IOException {
 		FileReceiver receiver = new FileReceiver("", 1111, "");
 		
-		File file = new File("./test/one/two/three"); // It is important to have the first . !!!
+		File target = new File("./target");
+		PosixFileAttributes attrs = Files.readAttributes(target.toPath(), PosixFileAttributes.class);
+		UserPrincipal user = attrs.owner();
+		GroupPrincipal group = attrs.group();
 		
-		UserPrincipalLookupService lookupservice=FileSystems.getDefault().getUserPrincipalLookupService();
+		File parentFile = new File(target, "test");
+		File file = new File(parentFile, "one/two/three"); // It is important to have the first . !!!
+		
 		Set<PosixFilePermission> permissions = new HashSet<PosixFilePermission>();
 		permissions.add(PosixFilePermission.OWNER_READ);
 		permissions.add(PosixFilePermission.OWNER_WRITE);
 		permissions.add(PosixFilePermission.OWNER_EXECUTE);
-		receiver.mkdir(file, lookupservice.lookupPrincipalByName(System.getProperty("user.name")), permissions);
+		permissions.add(PosixFilePermission.GROUP_READ);
+		permissions.add(PosixFilePermission.GROUP_WRITE);
+		permissions.add(PosixFilePermission.GROUP_EXECUTE);
+		
+		receiver.mkdir(file, user, group, permissions);
 		
 		assertTrue(file.exists());
+		
+		attrs = Files.readAttributes(file.toPath(), PosixFileAttributes.class);
+		assertEquals(user.getName(), attrs.owner().getName());
+		assertEquals(group.getName(), attrs.group().getName());
+		Set<PosixFilePermission> newPermissions = attrs.permissions();
+		assertEquals(permissions, newPermissions);
+		
+		attrs = Files.readAttributes(parentFile.toPath(), PosixFileAttributes.class);
+		assertEquals(user.getName(), attrs.owner().getName());
+		assertEquals(group.getName(), attrs.group().getName());
+		newPermissions = attrs.permissions();
+		assertEquals(permissions, newPermissions);
+		
+		// clean filesystem
+		Files.walkFileTree(parentFile.toPath(), new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult visitFile(Path file,
+					BasicFileAttributes attrs) throws IOException {
+				Files.delete(file);
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFileFailed(Path file, IOException exc)
+					throws IOException {
+				Files.delete(file);
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+					throws IOException {
+				if (exc == null) {
+					Files.delete(dir);
+					return FileVisitResult.CONTINUE;
+				} else {
+					// directory iteration failed; propagate exception
+					throw exc;
+				}
+			}
+		});
+		assertFalse(file.exists());
+		assertFalse(parentFile.exists());
 	}
 
 }

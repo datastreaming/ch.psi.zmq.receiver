@@ -23,6 +23,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.attribute.GroupPrincipal;
+import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.UserPrincipal;
 import java.nio.file.attribute.UserPrincipalLookupService;
@@ -129,8 +132,7 @@ public class FileReceiver {
 					logger.warning("Message type ["+h.get("htype")+"] not supported - ignore message");
 					continue;
 				}
-				
-				
+					
 				String username = (String) h.get("username");
 				
 				// Save content to file (in basedir)
@@ -155,7 +157,9 @@ public class FileReceiver {
 							permissions.add(PosixFilePermission.GROUP_READ);
 							permissions.add(PosixFilePermission.GROUP_WRITE);
 							permissions.add(PosixFilePermission.GROUP_EXECUTE);
-					        mkdir(f, lookupservice.lookupPrincipalByName(username), permissions);
+							// username and groupname is the same by convention
+					        mkdir(f, lookupservice.lookupPrincipalByName(username), 
+					        		lookupservice.lookupPrincipalByGroupName(username), permissions);
 						} catch (IOException e) {
 							throw new RuntimeException("Unable to create directory for user "+username+"", e);
 						}
@@ -172,6 +176,9 @@ public class FileReceiver {
 				
 				if(username!=null){
 			        Files.setOwner(file.toPath(), lookupservice.lookupPrincipalByName(username));
+			        // username and groupname is the same by convention
+			        Files.getFileAttributeView(file.toPath(), PosixFileAttributeView.class,
+			                LinkOption.NOFOLLOW_LINKS).setGroup(lookupservice.lookupPrincipalByGroupName(username));
 			        Files.setPosixFilePermissions(file.toPath(), perms);
 				}
 				
@@ -225,14 +232,16 @@ public class FileReceiver {
 	 * @param perms
 	 * @throws IOException
 	 */
-	public void mkdir(File f, UserPrincipal user, Set<PosixFilePermission> perms) throws IOException{
+	public void mkdir(File f, UserPrincipal user, GroupPrincipal group, Set<PosixFilePermission> perms) throws IOException{
 		if(!f.getParentFile().exists()){
-			mkdir(f.getParentFile(),user, perms);
+			mkdir(f.getParentFile(), user, group, perms);
 		}
 		
 		logger.info("Create directory: "+f.getPath());
 		f.mkdir();
 		Files.setOwner(f.toPath(), user);
+        Files.getFileAttributeView(f.toPath(), PosixFileAttributeView.class,
+                LinkOption.NOFOLLOW_LINKS).setGroup(group);
 		Files.setPosixFilePermissions(f.toPath(), perms);
 	}
 	
