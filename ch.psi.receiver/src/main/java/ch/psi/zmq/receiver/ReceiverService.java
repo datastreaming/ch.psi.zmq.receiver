@@ -16,7 +16,7 @@
  * along with this code. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package ch.psi.receiver;
+package ch.psi.zmq.receiver;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,8 +40,8 @@ import org.glassfish.jersey.media.sse.OutboundEvent;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
 import org.glassfish.jersey.media.sse.SseFeature;
 
-import ch.psi.receiver.model.ReceiverRequest;
-import ch.psi.receiver.model.ReceiverStatus;
+import ch.psi.zmq.receiver.model.ReceiverRequest;
+import ch.psi.zmq.receiver.model.ReceiverStatus;
 
 @Path("/")
 public class ReceiverService {

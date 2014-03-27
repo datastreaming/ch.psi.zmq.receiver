@@ -16,7 +16,7 @@
  * along with this code. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package ch.psi.receiver;
+package ch.psi.zmq.receiver;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -29,7 +29,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.psi.receiver.model.ReceiverRequest;
+import ch.psi.zmq.receiver.model.ReceiverRequest;
 
 public class ReceiverServerTest {
 

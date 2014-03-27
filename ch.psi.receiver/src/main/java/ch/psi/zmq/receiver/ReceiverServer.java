@@ -1,4 +1,4 @@
-package ch.psi.receiver;
+package ch.psi.zmq.receiver;
 
 import java.io.File;
 import java.io.IOException;

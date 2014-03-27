@@ -1,4 +1,4 @@
-package ch.psi.receiver;
+package ch.psi.zmq.receiver;
 
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;

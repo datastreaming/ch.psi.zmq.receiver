@@ -16,7 +16,7 @@
  * along with this code. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package ch.psi.receiver.model;
+package ch.psi.zmq.receiver.model;
 
 public class ReceiverRequest {
 	

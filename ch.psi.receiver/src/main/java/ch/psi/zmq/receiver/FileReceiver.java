@@ -16,7 +16,7 @@
  * along with this code. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package ch.psi.receiver;
+package ch.psi.zmq.receiver;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -16,7 +16,7 @@
  * along with this code. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package ch.psi.receiver;
+package ch.psi.zmq.receiver;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ch.psi.receiver.model.ReceiverRequest;
+import ch.psi.zmq.receiver.model.ReceiverRequest;
 
 /**
  * 

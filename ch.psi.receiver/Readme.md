@@ -162,8 +162,8 @@ Extract zip file
 ```
 mkdir /opt/receiver
 cd /opt/receiver
-unzip ch.psi.receiver-<version>-bin.zip
-ln -s ch.psi.receiver-<version> latest
+unzip ch.psi.zmq.receiver-<version>-bin.zip
+ln -s ch.psi.zmq.receiver-<version> latest
 ```
 
 Register Init Script
