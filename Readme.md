@@ -1,5 +1,6 @@
 #Overview
 The receiver package provides an easy to use way to receive streamed files via ZMQ.
+So far the the receiver requires `pilatus-1.0` htype messages.
 
 
 # Usage
