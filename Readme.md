@@ -5,8 +5,6 @@ So far the the receiver requires `pilatus-1.0` htype messages.
 
 # Usage
 
-
-
 ## Receiver Server
 The receiver server can be started via the 'receiver' script located in the `bin` folder.
 
@@ -26,8 +24,22 @@ The web UI is accessible on `http://<host>:8080/static/` . Note: It is important
 # Development
 
 ## Build
-The project is build via Maven. The installation zip package can be build by executing `mvn clean compile assembly:assembly` . 
-After the build the zip file will be inside the `target` directory.
+The project is build via Gradle. It can be easily build via
+
+```bash
+./gradlew build
+```
+
+__Notes:__ You don't have to have Gradle installed on your machine. All you need is a Java JDK version >= 1.7 .
+
+The installation zip package can be build by
+
+```bash
+./gradlew distribution
+```
+
+Afterwards the installable zip file is available in the `build/distributions` directory.
+
 
 ## REST API
 
@@ -47,11 +59,11 @@ Accept: application/json
 200 - [ ]
 ```
 
-Register for receiver changes 
+Register for receiver changes
 
 ```
 GET events
- 
+
 200 - Server Send Event (SSE) stream.
 ```
 
@@ -76,7 +88,7 @@ PUT receiver/{id}
 	"hostname":"",
     "port":8888,
     "numberOfImages":0
-    
+
 }
 
 204 Stream created
@@ -89,7 +101,7 @@ Terminate receiver
 ```
 DELETE receiver/{id}
 
-200 - 
+200 -
 ```
 
 Wait for receiver to terminate after configured number of images are received
@@ -98,7 +110,7 @@ Wait for receiver to terminate after configured number of images are received
 GET receiver/{id}/done
 
 200 -
-``` 
+```
 
 Get receiver status
 
@@ -153,7 +165,7 @@ curl http://<hostname>:<port>/receivers
 
 
 # Installation
-The **Receiver** package required Java 7 or greater.
+The **Receiver** package requires Java 7 or greater.
 
 ## Simple Installation
 Extract zip file
